@@ -18,6 +18,8 @@ python3 -m http.server 8000
 
 Then visit `http://localhost:8000`.
 
+This browser preview is useful for quick UI work, but it will not be pixel-identical to the Streamlit deployment because Streamlit wraps the app in its own shell.
+
 ## Sandbox mode (safe testing)
 
 Use the sandbox build to test scoring logic changes without impacting the live app page or its stored question history.
@@ -50,6 +52,8 @@ To run the dynamic prototype instead:
 ```bash
 streamlit run streamlit_dynamic_app.py
 ```
+
+If you want the closest match to `steakmatch.streamlit.app`, use the Streamlit command locally instead of the raw `http.server` preview.
 
 ## Streamlit Cloud
 
