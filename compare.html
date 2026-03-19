@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Beef Cut Fit Analyzer (Compare Mode)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800;900&family=Nunito+Sans:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="grain" aria-hidden="true"></div>
+    <header class="hero">
+      <div class="hero-mark-row">
+        <span class="hero-mark" aria-hidden="true"></span>
+        <p class="kicker">Compare Mode</p>
+      </div>
+      <h1>Live vs Proposed Logic Comparison</h1>
+      <p class="hero-subtitle">
+        Run one quiz path and compare how the live and proposed recommendation
+        logic interpret the same answers.
+      </p>
+    </header>
+
+    <main class="layout">
+      <section class="panel intro" id="introPanel">
+        <div class="intro-top">
+          <div>
+            <p class="intro-eyebrow">Fast, clear, and actually useful</p>
+            <h2>Let&rsquo;s pick your next steak.</h2>
+            <p class="intro-lede">
+              Answer a few simple questions about flavor, texture, cooking
+              style, and budget. You&rsquo;ll get a top recommendation, fit brief,
+              key fit drivers, cooking profile, level options, and cut-specific
+              tips.
+            </p>
+          </div>
+        </div>
+
+        <div class="intro-columns">
+          <article class="intro-card">
+            <h3>How it works</h3>
+            <ol class="intro-steps">
+              <li>Pick the answer that feels most like you.</li>
+              <li>We map your preferences to cut traits.</li>
+              <li>Get a quick read, full fit brief, levels, and cooking tips.</li>
+            </ol>
+          </article>
+          <article class="intro-card">
+            <h3>What you get</h3>
+            <ul class="intro-list">
+              <li>Top cut recommendation</li>
+              <li>Fit brief</li>
+              <li>Key fit drivers</li>
+              <li>Cooking profile</li>
+              <li>Level 1 to Level 4 alternatives</li>
+              <li>Cooking tips and tricks</li>
+            </ul>
+          </article>
+        </div>
+
+        <button id="startBtn" class="btn-primary btn-intro">Get My Steak Recommendation</button>
+        <p class="intro-footnote">
+          One quiz run, two outputs: live logic and proposed sandbox logic.
+        </p>
+      </section>
+
+      <section class="panel quiz hidden" id="quizPanel">
+        <div class="progress-wrap">
+          <div class="progress-meta">
+            <span id="progressLabel">Question 1 of 22</span>
+            <span id="answeredLabel">0 answered</span>
+          </div>
+          <div class="progress-bar">
+            <span id="progressFill"></span>
+          </div>
+        </div>
+
+        <article class="question-shell">
+          <p id="questionType" class="question-type"></p>
+          <h2 id="questionPrompt"></h2>
+          <p id="questionDetail" class="question-detail"></p>
+          <div id="optionsWrap" class="options-wrap"></div>
+          <p id="warningText" class="warning-text hidden" role="alert">
+            Select an option to continue.
+          </p>
+        </article>
+
+        <div class="controls">
+          <button id="backBtn" class="btn-muted">Back</button>
+          <button id="nextBtn" class="btn-primary">Next</button>
+        </div>
+      </section>
+
+      <section class="panel result hidden" id="resultPanel">
+        <div class="result-header">
+          <p class="kicker">Top Recommendation</p>
+          <h2 id="primaryCutName"></h2>
+          <p id="primaryCutTagline" class="result-tagline"></p>
+          <div class="quick-read">
+            <h3>Quick Read</h3>
+            <p id="quickReadNarrative" class="quick-read-text"></p>
+          </div>
+          <div class="executive-brief">
+            <h3>Fit Brief</h3>
+            <p id="executiveSynopsis" class="executive-synopsis"></p>
+            <ul id="executiveHighlights" class="clean-list executive-highlights"></ul>
+            <h4 class="brief-subhead">Key Fit Drivers</h4>
+            <ul id="fitNotesList" class="clean-list fit-notes"></ul>
+          </div>
+        </div>
+
+        <div class="result-grid">
+          <article class="result-card full-width">
+            <h3>Cooking Profile</h3>
+            <ul id="cookingList" class="clean-list"></ul>
+          </article>
+          <article class="result-card full-width">
+            <h3>Cooking Tips &amp; Tricks</h3>
+            <p id="tipsCutLabel" class="tips-cut-label"></p>
+            <div id="tipsColumns" class="tips-columns"></div>
+          </article>
+          <article class="result-card full-width">
+            <h3>Recommendation Levels</h3>
+            <div class="tier-grid">
+              <section class="tier-column">
+                <h4 id="tier1Title">Level 1: Primary Recommendation</h4>
+                <ul id="tier1List" class="clean-list"></ul>
+              </section>
+              <section class="tier-column">
+                <h4 id="tier2Title">Level 2: Strong Alternatives</h4>
+                <ul id="tier2List" class="clean-list"></ul>
+              </section>
+              <section class="tier-column">
+                <h4 id="tier3Title">Level 3: Specialty Upgrades</h4>
+                <ul id="tier3List" class="clean-list"></ul>
+              </section>
+              <section class="tier-column">
+                <h4 id="tier4Title">Level 4: Explorer / Exotic Cuts</h4>
+                <ul id="tier4List" class="clean-list"></ul>
+              </section>
+            </div>
+          </article>
+          <article class="result-card full-width compare-panel">
+            <h3>Live vs Proposed Comparison</h3>
+            <p id="compareSummary" class="compare-summary"></p>
+            <div class="compare-grid">
+              <section>
+                <h4 id="compareLiveTopCut">Live Top Cut</h4>
+                <ul id="compareLiveTopList" class="clean-list compare-list"></ul>
+              </section>
+              <section>
+                <h4 id="compareSandboxTopCut">Proposed Top Cut</h4>
+                <ul id="compareSandboxTopList" class="clean-list compare-list"></ul>
+              </section>
+            </div>
+            <h4>Largest Rank Deltas</h4>
+            <ul id="compareDeltaList" class="clean-list compare-list"></ul>
+          </article>
+        </div>
+
+        <button id="restartBtn" class="btn-primary">Retake Assessment</button>
+      </section>
+    </main>
+
+    <footer class="footer">Educational tool for cut discovery and meal planning.</footer>
+
+    <script src="proposed_priority_matrix.js"></script>
+    <script src="compare_app.js"></script>
+  </body>
+</html>

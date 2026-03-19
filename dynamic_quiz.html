@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Beef Cut Fit Analyzer (Dynamic Prototype)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800;900&family=Nunito+Sans:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      .hero.hero-compact {
+        margin-top: 1.2rem;
+        margin-bottom: 0.8rem;
+        padding: 1.2rem 1.35rem;
+      }
+
+      .hero.hero-compact h1 {
+        font-size: clamp(1.65rem, 4.2vw, 2.7rem);
+        line-height: 0.98;
+        margin-top: 0.28rem;
+      }
+
+      .hero.hero-compact .subtitle {
+        margin-top: 0.55rem;
+        max-width: 56ch;
+        font-size: 0.96rem;
+      }
+
+      .intro-callout {
+        margin-top: 0.85rem;
+        padding: 0.8rem 0.9rem;
+        border-radius: 12px;
+        border: 1px solid rgba(95, 64, 54, 0.18);
+        background: #fbf7f0;
+        color: #5a463d;
+      }
+
+      .intro-callout strong {
+        color: #3b2b25;
+      }
+
+      .answer-path {
+        display: grid;
+        gap: 0.7rem;
+      }
+
+      .answer-path-item {
+        padding: 0.85rem 0.9rem;
+        border-radius: 12px;
+        background: #f7f1e8;
+        border: 1px solid rgba(95, 64, 54, 0.16);
+      }
+
+      .answer-path-item h4 {
+        margin-bottom: 0.25rem;
+      }
+
+      .answer-path-item p {
+        margin: 0;
+        color: #5e493f;
+      }
+
+      .chip-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.45rem;
+        margin-top: 0.75rem;
+      }
+
+      .answer-chip {
+        display: inline-flex;
+        align-items: center;
+        border-radius: 999px;
+        padding: 0.35rem 0.7rem;
+        background: rgba(140, 31, 45, 0.08);
+        color: #6f2932;
+        border: 1px solid rgba(140, 31, 45, 0.18);
+        font-size: 0.9rem;
+        font-weight: 700;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="grain" aria-hidden="true"></div>
+    <header class="hero hero-compact">
+      <p class="kicker">Adaptive Prototype</p>
+      <h1>Build A Dynamic Steak Quiz</h1>
+      <p class="subtitle">
+        A separate branching questionnaire scaffold for testing baseline
+        questions, tradeoff prompts, and adaptive recommendation logic.
+      </p>
+    </header>
+
+    <main class="layout">
+      <section class="panel intro" id="introPanel">
+        <div class="intro-top">
+          <div>
+            <p class="intro-eyebrow">Separate from the live quiz</p>
+            <h2>Test dynamic question flow safely.</h2>
+            <p class="intro-lede">
+              This prototype starts with 3 baseline questions, then picks the
+              next question based on conflict, candidate cuts, and missing
+              signal.
+            </p>
+          </div>
+        </div>
+
+        <div class="intro-columns">
+          <article class="intro-card">
+            <h3>Baseline signals</h3>
+            <ol class="intro-steps">
+              <li>Texture goal</li>
+              <li>Fat / leanness preference</li>
+              <li>Budget posture</li>
+            </ol>
+          </article>
+          <article class="intro-card">
+            <h3>What this scaffold tests</h3>
+            <ul class="intro-list">
+              <li>Branching follow-up questions</li>
+              <li>Tradeoff resolution prompts</li>
+              <li>Cut ranking logic with adaptive weights</li>
+            </ul>
+          </article>
+        </div>
+
+        <div class="intro-callout">
+          <strong>Prototype behavior:</strong> if someone asks for tender, lean,
+          and economical, the next question forces priority instead of assuming
+          an impossible perfect cut.
+        </div>
+
+        <button id="startBtn" class="btn-primary btn-intro">
+          Launch Dynamic Prototype
+        </button>
+        <p class="intro-footnote">
+          Uses its own in-memory flow and separate storage key.
+        </p>
+      </section>
+
+      <section class="panel quiz hidden" id="quizPanel">
+        <div class="progress-wrap">
+          <div class="progress-meta">
+            <span id="progressLabel">Question 1 of 3</span>
+            <span id="answeredLabel">0 answered</span>
+          </div>
+          <div class="progress-bar">
+            <span id="progressFill"></span>
+          </div>
+        </div>
+
+        <article class="question-shell">
+          <p id="questionType" class="question-type"></p>
+          <h2 id="questionPrompt"></h2>
+          <p id="questionDetail" class="question-detail"></p>
+          <div id="optionsWrap" class="options-wrap"></div>
+          <p id="warningText" class="warning-text hidden" role="alert">
+            Select an option to continue.
+          </p>
+        </article>
+
+        <div class="controls">
+          <button id="backBtn" class="btn-muted">Back</button>
+        </div>
+      </section>
+
+      <section class="panel result hidden" id="resultPanel">
+        <div class="result-header">
+          <p class="kicker">Prototype Recommendation</p>
+          <h2 id="primaryCutName"></h2>
+          <p id="primaryCutTagline" class="result-tagline"></p>
+          <div class="quick-read">
+            <h3>Quick Read</h3>
+            <p id="quickReadNarrative" class="quick-read-text"></p>
+          </div>
+          <div class="chip-row" id="signalChips"></div>
+        </div>
+
+        <div class="result-grid">
+          <article class="result-card">
+            <h3>Why This Fit</h3>
+            <ul id="fitReasonsList" class="clean-list"></ul>
+          </article>
+          <article class="result-card">
+            <h3>Primary Tradeoff</h3>
+            <p id="tradeoffSummary" class="result-tagline"></p>
+          </article>
+          <article class="result-card full-width">
+            <h3>Cooking Profile</h3>
+            <ul id="cookingList" class="clean-list kv-list"></ul>
+          </article>
+          <article class="result-card full-width">
+            <h3>Cooking Tips &amp; Tricks</h3>
+            <p id="tipsCutLabel" class="tips-cut-label"></p>
+            <div id="tipsColumns" class="tips-columns"></div>
+          </article>
+          <article class="result-card full-width">
+            <h3>Recommendation Levels</h3>
+            <div class="tier-grid">
+              <section class="tier-column">
+                <h4 id="tier1Title">Level 1: Primary Recommendation</h4>
+                <ul id="tier1List" class="clean-list"></ul>
+              </section>
+              <section class="tier-column">
+                <h4 id="tier2Title">Level 2: Same-Lane Upgrades</h4>
+                <ul id="tier2List" class="clean-list"></ul>
+              </section>
+              <section class="tier-column">
+                <h4 id="tier3Title">Level 3: Premium / Specialty</h4>
+                <ul id="tier3List" class="clean-list"></ul>
+              </section>
+              <section class="tier-column">
+                <h4 id="tier4Title">Level 4: BBQ / Explorer</h4>
+                <ul id="tier4List" class="clean-list"></ul>
+              </section>
+            </div>
+          </article>
+          <article class="result-card full-width">
+            <h3>Question Path</h3>
+            <div id="answerPath" class="answer-path"></div>
+          </article>
+        </div>
+
+        <div class="controls">
+          <button id="editBtn" class="btn-muted">Adjust Last Answer</button>
+          <button id="restartBtn" class="btn-primary">Restart Prototype</button>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      Dynamic prototype for branching steak-cut recommendation logic.
+    </footer>
+
+    <script src="dynamic_quiz.js"></script>
+  </body>
+</html>
